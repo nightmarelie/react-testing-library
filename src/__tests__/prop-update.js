@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/prefer-screen-queries */
 import React from 'react';
 import user from '@testing-library/user-event';
 import { render } from '@testing-library/react';
@@ -18,6 +19,7 @@ test('entering an invalid value shows an error message', () => {
 
   rerender(<FavoriteNumber max={12} />);
 
-  // eslint-disable-next-line testing-library/prefer-screen-queries
   expect(queryByRole('alert')).not.toBeInTheDocument();
+  // eslint-disable-next-line jest-dom/prefer-in-document
+  expect(queryByRole('alert')).toBe(null);
 });
