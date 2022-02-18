@@ -17,6 +17,7 @@ function Editor({ user }) {
       title: title.value,
       content: content.value,
       tags: tags.value.split(',').map(tag => tag.trim()),
+      date: new Date().toISOString(),
     };
 
     savePost(newPost).then(() => setRedirect(true));
