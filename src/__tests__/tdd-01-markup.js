@@ -7,13 +7,13 @@ test('renders a form with title, content, tags and a submit btn', async () => {
   const { getByLabelText, getByText } = render(<Editor />);
 
   const inputTitle = getByLabelText(/title/i);
-  const inputContetn = getByLabelText(/content/i);
+  const inputContent = getByLabelText(/content/i);
   const inputTags = getByLabelText(/tags/i);
 
   const btn = getByText(/submit/i);
 
   expect(inputTitle).toBeInTheDocument();
-  expect(inputContetn).toBeInTheDocument();
+  expect(inputContent).toBeInTheDocument();
   expect(inputTags).toBeInTheDocument();
   expect(btn).toBeInTheDocument();
 
