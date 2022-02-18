@@ -1,10 +1,16 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 
 import { HiddenMessage } from '../hidden-message';
 
-test('shows hidden message when toggle is clicked', async () => {
+jest.mock('react-transition-group', () => {
+  return {
+    CSSTransition: props => (props.in ? props.children : null),
+  };
+});
+
+test('shows hidden message when toggle is clicked', () => {
   const message = 'hello world!!';
   const { getByText, queryByText } = render(
     <HiddenMessage>{message}</HiddenMessage>,
@@ -17,5 +23,5 @@ test('shows hidden message when toggle is clicked', async () => {
   expect(getByText(message)).toBeInTheDocument();
 
   fireEvent.click(toggleBtn);
-  await waitFor(() => expect(queryByText(message)).not.toBeInTheDocument());
+  expect(queryByText(message)).not.toBeInTheDocument();
 });
