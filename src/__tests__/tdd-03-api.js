@@ -5,6 +5,10 @@ import { savePost as mockSavePost } from '../api';
 
 jest.mock('../api');
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 test('renders a form with title, content, tags and a submit btn', () => {
   mockSavePost.mockResolvedValueOnce();
   const fakeMock = {
