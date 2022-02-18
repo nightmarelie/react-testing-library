@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Redirect as MockRedirect } from 'react-router';
 import { build, fake, sequence } from 'test-data-bot';
-import { Editor } from '../post-editor-05-06-dates';
+import { Editor } from '../post-editor-07-error-state';
 import { savePost as mockSavePost } from '../api';
 
 jest.mock('../api');
@@ -25,11 +25,8 @@ const userBuilder = build('User').fields({
   id: sequence(s => `user-${s}`),
 });
 
-test('renders a form with title, content, tags and a submit btn', async () => {
-  mockSavePost.mockResolvedValueOnce();
+function renderEditor() {
   const fakeMock = postBuilder();
-
-  const preDate = new Date();
 
   const fakeUser = userBuilder();
 
@@ -40,6 +37,19 @@ test('renders a form with title, content, tags and a submit btn', async () => {
   screen.getByLabelText(/tags/i).value = fakeMock.tags.join(', ');
 
   const btn = screen.getByText(/submit/i);
+
+  return {
+    fakeUser,
+    fakeMock,
+    btn,
+  };
+}
+
+test('renders a form with title, content, tags and a submit btn', async () => {
+  const preDate = new Date();
+  mockSavePost.mockResolvedValueOnce();
+
+  const { fakeUser, fakeMock, btn } = renderEditor();
 
   fireEvent.click(btn);
   expect(btn).toBeDisabled();
@@ -61,4 +71,18 @@ test('renders a form with title, content, tags and a submit btn', async () => {
   await waitFor(() =>
     expect(MockRedirect).toHaveBeenCalledWith({ to: '/' }, {}),
   );
+});
+
+test('renders an error message from the server', async () => {
+  const testError = 'test error';
+  mockSavePost.mockRejectedValueOnce({ data: { error: testError } });
+
+  const { btn } = renderEditor();
+
+  fireEvent.click(btn);
+
+  const postError = await screen.findByRole('alert');
+  expect(postError).toHaveTextContent(testError);
+  // eslint-disable-next-line jest-dom/prefer-enabled-disabled
+  expect(btn).not.toBeDisabled();
 });

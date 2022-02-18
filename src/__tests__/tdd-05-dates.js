@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Redirect as MockRedirect } from 'react-router';
-import { Editor } from '../post-editor-05-dates';
+import { Editor } from '../post-editor-05-06-dates';
 import { savePost as mockSavePost } from '../api';
 
 jest.mock('../api');
