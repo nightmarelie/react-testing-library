@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { savePost } from './api';
 
-function Editor() {
+function Editor({ user }) {
   const [disabled, setDisabled] = React.useState(false);
 
   const handleSubmit = e => {
@@ -11,6 +11,7 @@ function Editor() {
     const { title, content, tags } = e.target.elements;
 
     const newPost = {
+      authorId: user.id,
       title: title.value,
       content: content.value,
       tags: tags.value.split(',').map(tag => tag.trim()),

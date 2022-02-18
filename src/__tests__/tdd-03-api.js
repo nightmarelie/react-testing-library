@@ -13,7 +13,9 @@ test('renders a form with title, content, tags and a submit btn', () => {
     tags: ['tag1', 'tag2'],
   };
 
-  render(<Editor />);
+  const fakeUser = { id: 'user-id' };
+
+  render(<Editor user={fakeUser} />);
 
   screen.getByLabelText(/title/i).value = fakeMock.title;
   screen.getByLabelText(/content/i).value = fakeMock.content;
@@ -25,5 +27,8 @@ test('renders a form with title, content, tags and a submit btn', () => {
   expect(btn).toBeDisabled();
 
   expect(mockSavePost).toHaveBeenCalledTimes(1);
-  expect(mockSavePost).toHaveBeenCalledWith(fakeMock);
+  expect(mockSavePost).toHaveBeenCalledWith({
+    ...fakeMock,
+    authorId: fakeUser.id,
+  });
 });
